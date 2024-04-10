@@ -288,6 +288,9 @@ class RandomWalkEnemy(Enemy):
             self.x = new_x
             self.y = new_y
 
+        if self.hits_player():
+            self.game.game_over_lose()
+
     def render(self) -> None:
         self.canvas.coords(self.__id,
                            self.x - self.size/2,
@@ -321,7 +324,8 @@ class ChasingEnemy(Enemy):
         else:
             self.y -= self.speed
 
-
+        if self.hits_player():
+            self.game.game_over_lose()
 
     def render(self) -> None:
         self.canvas.coords(self.__id,
@@ -361,6 +365,9 @@ class FencingEnemy(Enemy):
             self.steps = 0
 
         self.steps += 1
+
+        if self.hits_player():
+            self.game.game_over_lose()
 
     def render(self) -> None:
         self.canvas.coords(self.__id,
@@ -457,13 +464,6 @@ class TurtleAdventureGame(Game):
 
         self.player.x = 50
         self.player.y = self.screen_height//2
-
-    def update(self) -> None:
-        # Check if the player hits any enemy
-        for enemy in self.enemies:
-            if enemy.hits_player():
-                self.game_over_lose()
-                return
 
     def add_enemy(self, enemy: Enemy) -> None:
         """
