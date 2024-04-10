@@ -239,12 +239,6 @@ class Enemy(TurtleGameElement):
         )
 
 
-# TODO
-# * Define your enemy classes
-# * Implement all methods required by the GameElement abstract class
-# * Define enemy's update logic in the update() method
-# * Check whether the player hits this enemy, then call the
-#   self.game.game_over_lose() method in the TurtleAdventureGame class.
 class DemoEnemy(Enemy):
     """
     Demo enemy
@@ -463,6 +457,13 @@ class TurtleAdventureGame(Game):
 
         self.player.x = 50
         self.player.y = self.screen_height//2
+
+    def update(self) -> None:
+        # Check if the player hits any enemy
+        for enemy in self.enemies:
+            if enemy.hits_player():
+                self.game_over_lose()
+                return
 
     def add_enemy(self, enemy: Enemy) -> None:
         """
