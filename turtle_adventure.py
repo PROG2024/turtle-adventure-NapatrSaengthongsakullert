@@ -275,7 +275,7 @@ class RandomWalkEnemy(Enemy):
     """
     def __init__(self, game: "TurtleAdventureGame", size: int, color: str):
         super().__init__(game, size, color)
-        self.speed = 2
+        self.speed = 5
 
     def create(self) -> None:
         self.__id = self.canvas.create_oval(0, 0, 0, 0, fill=self.color)
@@ -300,6 +300,42 @@ class RandomWalkEnemy(Enemy):
                            self.y - self.size/2,
                            self.x + self.size/2,
                            self.y + self.size/2)
+
+
+class ChasingEnemy(Enemy):
+    """
+    Enemy that tries to chase the player.
+    """
+    def __init__(self, game: "TurtleAdventureGame", size: int, color: str):
+        super().__init__(game, size, color)
+        self.speed = 5
+
+    def create(self) -> None:
+        self.__id = self.canvas.create_oval(0, 0, 0, 0, fill=self.color)
+
+    def delete(self) -> None:
+        self.canvas.delete(self.__id)
+
+    def update(self) -> None:
+        player = self.game.player
+        if player.x > self.x:
+            self.x += self.speed
+        else:
+            self.x -= self.speed
+        if player.y > self.y:
+            self.y += self.speed
+        else:
+            self.y -= self.speed
+
+
+
+    def render(self) -> None:
+        self.canvas.coords(self.__id,
+                           self.x - self.size/2,
+                           self.y - self.size/2,
+                           self.x + self.size/2,
+                           self.y + self.size/2)
+
 # TODO
 # Complete the EnemyGenerator class by inserting code to generate enemies
 # based on the given game level; call TurtleAdventureGame's add_enemy() method
@@ -344,6 +380,11 @@ class EnemyGenerator:
         new_enemy.x = random.randint(0, self.game.screen_width)
         new_enemy.y = random.randint(0, self.game.screen_height)
         self.game.add_element(new_enemy)
+
+        new_enemy2 = ChasingEnemy(self.__game, 20, "red")
+        new_enemy2.x = random.randint(0, self.game.screen_width)
+        new_enemy2.y = random.randint(0, self.game.screen_height)
+        self.game.add_element(new_enemy2)
 
 
 class TurtleAdventureGame(Game):
